@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="intro">
+            <h1>Welcome To The Quiz App!</h1>
+            <h3>Players</h3>
+            <div class="player-amount">
+                <button id="subtract"><i class="fa-regular fa-square-minus"></i></button>
+                <input id="players-amount" type="text" readonly="readonly">
+                <button id="add"><i class="fa-regular fa-square-plus"></i></button>
+            </div>
+            <div class="categories">
+                <h3>
+                    Categories
+                </h3>
+                <div class="buttons">
+                    <button class="category-buttons" name="category" value="sports">Sports</button>
+                    <button class="category-buttons" name="category" value="history">History</button>
+                    <button class="category-buttons" name="category" value="movies">Movies</button>
+                    <button class="category-buttons" name="category" value="animals">Animals</button>
+                    <button class="category-buttons" name="category" value="mix">Mix</button>
+                </div>
+            </div>
+            <button id="intro-continue-button">Continue</button>
+        </div>
+        <div class="names">
+            <button id="start-game">Start Game</button>
+        </div>
+        <div class="game">
+
+        </div>
+    </div>
+
+</body>
+
+</html>
