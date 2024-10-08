@@ -1,7 +1,160 @@
-const app = {
-    players: [],
-    amountOfPlayers: 0,
 
+// Intro
+const introDiv = document.querySelector('.intro');
+let category = "";
+const categoryButtons = document.querySelectorAll('.category-buttons');
+const introContinueButton = document.getElementById('intro-continue-button');
+const subtractPlayers = document.getElementById('subtract');
+const addPlayers = document.getElementById('add');
+const amountPlayersInput = document.getElementById('players-amount');
+let amountOfPlayers = 0;
+
+
+// Names
+const namesDiv = document.querySelector('.names');
+const startGameButton = document.getElementById('start-game');
+
+
+// Game
+const gameDiv = document.querySelector('.game');
+const question = document.getElementById('question');
+const questionCategory = document.getElementById('category');
+const optionButtons = document.querySelectorAll('.option');
+const nextQuestionBtn = document.getElementById('next-question');
+let questions;
+let game;
+
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        category = button.value;
+
+        button.style.backgroundColor = 'green';
+    })
+})
+
+subtractPlayers.addEventListener('click', () => {
+    if (amountOfPlayers > 1) {
+        amountOfPlayers--;
+        amountPlayersInput.value = amountOfPlayers;
+    }
+})
+addPlayers.addEventListener('click', () => {
+    if (amountOfPlayers < 10) {
+        amountOfPlayers++;
+        amountPlayersInput.value = amountOfPlayers;
+    }
+})
+
+introContinueButton.addEventListener('click', () => {
+    introDiv.classList.toggle('hidden');
+    namesDiv.classList.toggle('show');
+    getQuestions(category);
+    makeNameInputs();
+
+})
+
+startGameButton.addEventListener('click', () => {
+    namesDiv.classList.toggle('show');
+    createPlayers();
+    startGame();
+})
+
+
+
+
+
+
+class Game {
+    constructor(questions, players) {
+        this.questions = questions;
+        this.players = players;
+        this.counter = 0;
+        this.currentPlayer = 0;
+
+
+    }
+
+    loadNewQuestion() {
+        this.answers = [
+            {
+                answer: this.questions.results[this.counter].correct_answer,
+                isCorrect: true
+            },
+            {
+                answer: this.questions.results[this.counter].incorrect_answers[0],
+                isCorrect: false
+            },
+            {
+                answer: this.questions.results[this.counter].incorrect_answers[1],
+                isCorrect: false
+            },
+            {
+                answer: this.questions.results[this.counter].incorrect_answers[2],
+                isCorrect: false
+            },
+        ]
+
+        questionCategory.textContent = this.questions.results[this.counter].category;
+        question.textContent = this.questions.results[this.counter].question;
+        for (let i = 0; i < 4; i++) {
+            optionButtons[i].value = this.answers[i].isCorrect;
+            optionButtons[i].textContent = this.answers[i].answer;
+        }
+
+        this.counter++;
+    }
+
+    checkIfCorrect(selected) {
+        if (selected.value === 'true') {
+            selected.style.backgroundColor = 'green';
+            this.givePoint();
+            this.changePlayer();
+        } else {
+            selected.style.backgroundColor = 'red';
+            optionButtons.forEach(option => {
+                if (option.value === 'true') {
+                    option.style.backgroundColor = 'green';
+                }
+            })
+            console.log(this.players[this.currentPlayer].name);
+            console.log(this.players[this.currentPlayer].score);
+            this.changePlayer();
+            
+        }
+    }
+    
+    changePlayer() {
+        if (this.currentPlayer < this.players.length - 1) {
+            this.currentPlayer++;
+        } else {
+            this.currentPlayer = 0;
+        }
+    }
+
+    givePoint() {
+        this.players[this.currentPlayer].score ++;
+            console.log(this.players[this.currentPlayer].name);
+            console.log(this.players[this.currentPlayer].score);
+    }
+
+
+}
+
+optionButtons.forEach(selected => {
+    selected.addEventListener('click', () => {
+        game.checkIfCorrect(selected);
+    });
+})
+
+nextQuestionBtn.addEventListener('click', () => {
+    resetOptionColors();
+    game.loadNewQuestion();
+});
+
+function resetOptionColors() {
+    optionButtons.forEach(option => {
+        option.style.backgroundColor = 'white';
+    })
 }
 
 class Player {
@@ -20,54 +173,22 @@ class Player {
     }
 }
 
-let category = "";
-const introDiv = document.querySelector('.intro');
-const categoryButtons = document.querySelectorAll('.category-buttons');
-const introContinueButton = document.getElementById('intro-continue-button');
-const namesDiv = document.querySelector('.names');
-const subtractPlayers = document.getElementById('subtract');
-const amountPlayersInput = document.getElementById('players-amount');
-const addPlayers = document.getElementById('add');
-const startGameButton = document.getElementById('start-game');
-let questions;
-const gameDiv = document.querySelector('.game');
 
-categoryButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        category = button.value;
 
-        button.style.backgroundColor = 'green';
-    })
-})
 
-subtractPlayers.addEventListener('click', () => {
-    if (app.amountOfPlayers > 1) {
-        app.amountOfPlayers--;
-        amountPlayersInput.value = app.amountOfPlayers;
-        console.log(app.amountOfPlayers);
-    }
-})
-addPlayers.addEventListener('click', () => {
-    if (app.amountOfPlayers < 10) {
-        app.amountOfPlayers++;
-        amountPlayersInput.value = app.amountOfPlayers;
-        console.log(app.amountOfPlayers);
-    }
-})
 
-introContinueButton.addEventListener('click', () => {
-    introDiv.classList.toggle('hidden');
-    namesDiv.classList.toggle('show');
-    getQuestions(category);
-    makeNameInputs();
 
-})
 
-startGameButton.addEventListener('click', () => {
-    namesDiv.classList.toggle('show');
-    createPlayers();
-    startGame();
-})
+
+
+
+
+
+
+
+
+
+
 
 async function getQuestions(category) {
     let response;
@@ -107,7 +228,7 @@ async function getQuestions(category) {
 }
 
 function makeNameInputs() {
-    for (let i = 0; i < app.amountOfPlayers; i++) {
+    for (let i = 0; i < amountOfPlayers; i++) {
         const nameInput = document.createElement('input');
         nameInput.className = "name-input";
         namesDiv.prepend(nameInput);
@@ -122,67 +243,23 @@ function createHeader() {
 }
 
 function createPlayers() {
-    for (let i = 0; i < app.amountOfPlayers; i++) {
+    const players = [];
+    for (let i = 0; i < amountOfPlayers; i++) {
         const player = new Player(document.querySelectorAll('.name-input')[i].value, i + 1);
-        app.players.push(player);
+        players.push(player);
     }
-    console.log(app.players);
+
+    createGame(players);
+
+
+}
+
+function createGame(players) {
+    game = new Game(questions, players);
 }
 
 function startGame() {
-    createElementsAndloadNewQuestion();
-
-
-}
-
-    let counter = 0;
-function createElementsAndloadNewQuestion() {
-    let answers = [
-        {
-            answer: questions.results[counter].correct_answer,
-            isCorrect: true
-        },
-        {
-            answer: questions.results[counter].incorrect_answers[0],
-            isCorrect: false
-        },
-        {
-            answer: questions.results[counter].incorrect_answers[1],
-            isCorrect: false
-        },
-        {
-            answer: questions.results[counter].incorrect_answers[2],
-            isCorrect: false
-        },
-    ]
-
-    gameDiv.innerHTML = "";
-    const category = document.createElement('h2');
-    category.textContent = questions.results[counter].category;
-    const question = document.createElement('h3');
-    const optionsDiv = document.createElement('div');
-    optionsDiv.className = 'options';
-    for (let i = 0; i < 4; i++) {
-        const optionButton = document.createElement('button');
-        optionButton.className = "option";
-        optionButton.value = answers[i].isCorrect;
-        optionButton.textContent = answers[i].answer;
-        optionsDiv.appendChild(optionButton);
-    }
-    const nextQuestionBtn = document.createElement('button');
-    nextQuestionBtn.className = 'next-question';
-
-
-    question.textContent = questions.results[counter].question;
-
-    gameDiv.appendChild(category);
-    gameDiv.appendChild(question);
-    gameDiv.appendChild(optionsDiv);
-    gameDiv.appendChild(nextQuestionBtn);
-    counter ++;
-    nextQuestionBtn.addEventListener('click', startGame);
-
-
+    game.loadNewQuestion();
 
 
 }
