@@ -18,7 +18,6 @@ const startGameButton = document.getElementById('start-game');
 // Game
 const gameDiv = document.querySelector('.game');
 const question = document.getElementById('question');
-const questionCategory = document.getElementById('category');
 const optionButtons = document.querySelectorAll('.option');
 const nextQuestionBtn = document.getElementById('next-question');
 const timeLeft = document.getElementById('timer');
@@ -107,7 +106,6 @@ class Game {
                 },
             ]
 
-            questionCategory.textContent = this.questions.results[this.counter].category;
             question.textContent = this.questions.results[this.counter].question;
             for (let i = 0; i < 4; i++) {
                 optionButtons[i].value = this.answers[i].isCorrect;
