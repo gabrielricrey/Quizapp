@@ -21,14 +21,23 @@ const question = document.getElementById('question');
 const questionCategory = document.getElementById('category');
 const optionButtons = document.querySelectorAll('.option');
 const nextQuestionBtn = document.getElementById('next-question');
+const timeLeft = document.getElementById('timer');
 let questions;
 let game;
+
+// Result
+const resultDiv = document.querySelector('.result');
+const resultList = document.getElementById('result-list');
+
+
 
 categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
         category = button.value;
-
-        button.style.backgroundColor = 'green';
+        categoryButtons.forEach(button => {
+            button.style.backgroundColor = 'white';
+        })
+        button.style.backgroundColor = 'lightgreen';
     })
 })
 
@@ -55,6 +64,7 @@ introContinueButton.addEventListener('click', () => {
 
 startGameButton.addEventListener('click', () => {
     namesDiv.classList.toggle('show');
+    gameDiv.classList.toggle('show');
     createPlayers();
     startGame();
 })
@@ -70,59 +80,89 @@ class Game {
         this.players = players;
         this.counter = 0;
         this.currentPlayer = 0;
+        this.gameOver = false;
+        this.timer = null;
+        this.timeLimit = 15000;
+    
+    }
+
+    loadNewQuestion() {
+        if (this.counter < this.questions.results.length) {
+            this.answers = [
+                {
+                    answer: this.questions.results[this.counter].correct_answer,
+                    isCorrect: true
+                },
+                {
+                    answer: this.questions.results[this.counter].incorrect_answers[0],
+                    isCorrect: false
+                },
+                {
+                    answer: this.questions.results[this.counter].incorrect_answers[1],
+                    isCorrect: false
+                },
+                {
+                    answer: this.questions.results[this.counter].incorrect_answers[2],
+                    isCorrect: false
+                },
+            ]
+
+            questionCategory.textContent = this.questions.results[this.counter].category;
+            question.textContent = this.questions.results[this.counter].question;
+            for (let i = 0; i < 4; i++) {
+                optionButtons[i].value = this.answers[i].isCorrect;
+                optionButtons[i].textContent = this.answers[i].answer;
+            }
+            
+            this.startTimer();
+        } else {
+            this.showResults();
+            this.gameOver = true;
+            console.log('GAME OVER')
+        }
+
 
 
     }
 
-    loadNewQuestion() {
-        this.answers = [
-            {
-                answer: this.questions.results[this.counter].correct_answer,
-                isCorrect: true
-            },
-            {
-                answer: this.questions.results[this.counter].incorrect_answers[0],
-                isCorrect: false
-            },
-            {
-                answer: this.questions.results[this.counter].incorrect_answers[1],
-                isCorrect: false
-            },
-            {
-                answer: this.questions.results[this.counter].incorrect_answers[2],
-                isCorrect: false
-            },
-        ]
-
-        questionCategory.textContent = this.questions.results[this.counter].category;
-        question.textContent = this.questions.results[this.counter].question;
-        for (let i = 0; i < 4; i++) {
-            optionButtons[i].value = this.answers[i].isCorrect;
-            optionButtons[i].textContent = this.answers[i].answer;
+    startTimer() {
+        if(this.timer) {
+            clearTimeout(this.timer);
         }
 
-        this.counter++;
+        this.timer = setTimeout(() => {
+            console.log('Time is up!');
+            this.changePlayer(); // Byt spelare om tiden går ut
+            this.disableOptions();
+        }, this.timeLimit);
     }
 
     checkIfCorrect(selected) {
         if (selected.value === 'true') {
-            selected.style.backgroundColor = 'green';
+            selected.style.backgroundColor = 'lightgreen';
             this.givePoint();
             this.changePlayer();
         } else {
             selected.style.backgroundColor = 'red';
             optionButtons.forEach(option => {
                 if (option.value === 'true') {
-                    option.style.backgroundColor = 'green';
+                    option.style.backgroundColor = 'lightgreen';
                 }
             })
             console.log(this.players[this.currentPlayer].name);
             console.log(this.players[this.currentPlayer].score);
+            console.log(this.counter);
             this.changePlayer();
-            
+
         }
     }
-    
+
+    disableOptions() {
+        optionButtons.forEach(button => {
+            button.disabled = true
+        })
+    }
+
     changePlayer() {
         if (this.currentPlayer < this.players.length - 1) {
             this.currentPlayer++;
@@ -132,9 +172,26 @@ class Game {
     }
 
     givePoint() {
-        this.players[this.currentPlayer].score ++;
-            console.log(this.players[this.currentPlayer].name);
-            console.log(this.players[this.currentPlayer].score);
+        this.players[this.currentPlayer].score++;
+        console.log(this.players[this.currentPlayer].name);
+        console.log(this.players[this.currentPlayer].score);
+        console.log(this.counter);
+    }
+
+    showResults() {
+        console.log('inside showresults')
+        game.players.sort((a,b) => b.score - a.score);
+        game.players.forEach(player => {
+            const listItem = document.createElement('li');
+            const name = document.createElement('p');
+            name.textContent = player.name
+            const score = document.createElement('p');
+            score.textContent = `${player.score}/${game.questions.results.length}`;
+            listItem.appendChild(name)
+            listItem.appendChild(score)
+
+            resultList.appendChild(listItem);
+        })
     }
 
 
@@ -143,18 +200,36 @@ class Game {
 optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
         game.checkIfCorrect(selected);
+        game.disableOptions();
+        // optionButtons.forEach(button => {
+        //     button.disabled = true;
+        // })
     });
 })
 
 nextQuestionBtn.addEventListener('click', () => {
-    resetOptionColors();
-    game.loadNewQuestion();
+    if(!game.gameOver) {
+        game.counter++;
+        resetOptionColors();
+        game.loadNewQuestion();
+        optionButtons.forEach(button => {
+            button.disabled = false;
+        })
+    } else {
+        gameDiv.classList.toggle('show');
+        resultDiv.classList.toggle('show');
+    }
 });
 
 function resetOptionColors() {
     optionButtons.forEach(option => {
         option.style.backgroundColor = 'white';
     })
+}
+
+function showResults() {
+    console.log('RESULTS')
+
 }
 
 class Player {
@@ -260,8 +335,6 @@ function createGame(players) {
 
 function startGame() {
     game.loadNewQuestion();
-
-
 }
 
 
