@@ -12,6 +12,7 @@ let amountOfPlayers = 0;
 
 // Names
 const namesDiv = document.querySelector('.names');
+const namesInputDiv = document.querySelector('.names-div');
 const startGameButton = document.getElementById('start-game');
 
 
@@ -54,19 +55,37 @@ addPlayers.addEventListener('click', () => {
 })
 
 introContinueButton.addEventListener('click', () => {
-    introDiv.classList.toggle('hidden');
-    namesDiv.classList.toggle('show');
-    getQuestions(category);
-    makeNameInputs();
+    if(!category == '' && !amountOfPlayers == 0) {
+        introDiv.classList.toggle('hidden');
+        namesDiv.classList.toggle('show');
+        getQuestions(category);
+        makeNameInputs();
+    } else {
+        console.log('Choose a category and how many players');
+        alert('Choose a category and how many players');
+    }
 
 })
 
 startGameButton.addEventListener('click', () => {
-    namesDiv.classList.toggle('show');
-    gameDiv.classList.toggle('show');
-    createPlayers();
-    startGame();
-})
+    const inputs = namesInputDiv.children;
+
+    // Check if all inputs are filled
+    if ([...inputs].every(input => input.value.trim() !== "")) {
+      // If all inputs are filled
+      console.log("All inputs are filled!");
+      namesDiv.classList.toggle('show');
+        gameDiv.classList.toggle('show');
+        createPlayers();
+        startGame();
+      // Proceed to the next step
+    } else {
+      // If any input is empty, alert the user
+      alert("Please fill in all inputs with a name.");
+    }
+
+  });
+
 
 
 
@@ -80,8 +99,6 @@ class Game {
         this.counter = 0;
         this.currentPlayer = 0;
         this.gameOver = false;
-        this.timer = null;
-        this.timeLimit = 15000;
     
     }
 
@@ -106,13 +123,18 @@ class Game {
                 },
             ]
 
+            this.answers = shuffleArray(this.answers);
+
             question.textContent = this.questions.results[this.counter].question;
             for (let i = 0; i < 4; i++) {
                 optionButtons[i].value = this.answers[i].isCorrect;
                 optionButtons[i].textContent = this.answers[i].answer;
             }
+
+
             
-            this.startTimer();
+
+            
         } else {
             this.showResults();
             this.gameOver = true;
@@ -121,18 +143,6 @@ class Game {
 
 
 
-    }
-
-    startTimer() {
-        if(this.timer) {
-            clearTimeout(this.timer);
-        }
-
-        this.timer = setTimeout(() => {
-            console.log('Time is up!');
-            this.changePlayer(); // Byt spelare om tiden går ut
-            this.disableOptions();
-        }, this.timeLimit);
     }
 
     checkIfCorrect(selected) {
@@ -219,6 +229,14 @@ nextQuestionBtn.addEventListener('click', () => {
     }
 });
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // Get a random index from 0 to i
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
+    }
+    return array;
+  }
+  
 function resetOptionColors() {
     optionButtons.forEach(option => {
         option.style.backgroundColor = 'white';
@@ -231,10 +249,9 @@ function showResults() {
 }
 
 class Player {
-    constructor(name, id) {
+    constructor(name) {
         this.name = name;
         this.score = 0;
-        this.id = id;
     }
 
     addScore() {
@@ -245,21 +262,6 @@ class Player {
         this.score = 0
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -304,15 +306,8 @@ function makeNameInputs() {
     for (let i = 0; i < amountOfPlayers; i++) {
         const nameInput = document.createElement('input');
         nameInput.className = "name-input";
-        namesDiv.prepend(nameInput);
+        namesInputDiv.append(nameInput);
     }
-    createHeader()
-}
-
-function createHeader() {
-    const h2 = document.createElement('h2');
-    h2.innerText = 'Enter player names';
-    namesDiv.prepend(h2);
 }
 
 function createPlayers() {

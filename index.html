@@ -12,53 +12,54 @@
 
 <body>
 
-    <div class="container">
-        <div class="intro">
-            <h1>Quizy!</h1>
-            <div class="game-info">
-                <div class="player-amount">
-                    <h3>Players</h3>
-                    <div class="input">
-                        <button id="subtract"><i class="fa-regular fa-square-minus"></i></button>
-                        <input id="players-amount" type="text" readonly="readonly">
-                        <button id="add"><i class="fa-regular fa-square-plus"></i></button>
-                    </div>
-                </div>
-                <div class="categories">
-                    <div class="buttons">
-                        <button class="category-buttons" name="category" value="sports">Sports</button>
-                        <button class="category-buttons" name="category" value="history">History</button>
-                        <button class="category-buttons" name="category" value="movies">Movies</button>
-                        <button class="category-buttons" name="category" value="animals">Animals</button>
-                    </div>
-                    <button id="intro-continue-button">Continue</button>
+    <div class="intro">
+        <h1>Quizy!</h1>
+        <div class="game-info">
+            <div class="player-amount">
+                <h3>Players</h3>
+                <div class="input">
+                    <button id="subtract"><i class="fa-regular fa-square-minus"></i></button>
+                    <input id="players-amount" type="text" readonly="readonly">
+                    <button id="add"><i class="fa-regular fa-square-plus"></i></button>
                 </div>
             </div>
-        </div>
-
-
-        <div class="names">
-            <button id="start-game">Start Game</button>
-        </div>
-
-        
-        <div class="game">
-            <div class="options">
-                <h3 id="question"></h3>
-                <button class="option"></button>
-                <button class="option"></button>
-                <button class="option"></button>
-                <button class="option"></button>
-                <button id="next-question">Next</button>
+            <div class="categories">
+                <div class="buttons">
+                    <button class="category-buttons" name="category" value="sports">Sports</button>
+                    <button class="category-buttons" name="category" value="history">History</button>
+                    <button class="category-buttons" name="category" value="movies">Movies</button>
+                    <button class="category-buttons" name="category" value="animals">Animals</button>
+                </div>
+                <button id="intro-continue-button">Continue</button>
             </div>
-            <p id="timer"></p>
         </div>
-        <div class="result">
-            <h2>Result</h2>
-            <ul id="result-list">
+    </div>
 
-            </ul>
+
+    <div class="names">
+        <h2>Enter Player names</h2>
+        <div class="names-div">
+
         </div>
+        <button id="start-game">Start Game</button>
+    </div>
+
+
+    <div class="game">
+        <h3 id="question"></h3>
+        <div class="options">
+            <button class="option"></button>
+            <button class="option"></button>
+            <button class="option"></button>
+            <button class="option"></button>
+            <button id="next-question">Next</button>
+        </div>
+    </div>
+    <div class="result">
+        <h2>Result</h2>
+        <ul id="result-list">
+
+        </ul>
     </div>
 
 </body>
