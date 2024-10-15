@@ -99,7 +99,6 @@ class Game {
         if (selected.value === 'true') {
             selected.style.backgroundColor = 'lightgreen';
             this.givePoint();
-            // this.changePlayer();
         } else {
             selected.style.backgroundColor = 'red';
             optionButtons.forEach(option => {
@@ -107,14 +106,12 @@ class Game {
                     option.style.backgroundColor = 'lightgreen';
                 }
             })
-            // this.changePlayer();
-
         }
     }
 
-    disableOptions() {
+    ableAndDisableOptions() {
         optionButtons.forEach(button => {
-            button.disabled = true
+            button.disabled = !button.disabled;
         })
     }
 
@@ -209,7 +206,7 @@ startGameButton.addEventListener('click', () => {
 optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
         game.checkIfCorrect(selected);
-        game.disableOptions();
+        game.ableAndDisableOptions();
         nextQuestionBtn.classList.toggle('show');
     });
 })
@@ -220,9 +217,10 @@ nextQuestionBtn.addEventListener('click', () => {
     resetOptionColors();
     game.changePlayer();
     game.loadNewQuestion();
-    optionButtons.forEach(button => {
-        button.disabled = false;
-    })
+    game.ableAndDisableOptions();
+    // optionButtons.forEach(button => {
+    //     button.disabled = false;
+    // })
 });
 
 function shuffleArray(array) {
