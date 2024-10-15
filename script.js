@@ -21,7 +21,8 @@ const gameDiv = document.querySelector('.game');
 const question = document.getElementById('question');
 const optionButtons = document.querySelectorAll('.option');
 const nextQuestionBtn = document.getElementById('next-question');
-const timeLeft = document.getElementById('timer');
+const player = document.getElementById('current-player');
+const questionCounter = document.getElementById('question-counter');
 let questions;
 let game;
 
@@ -29,68 +30,20 @@ let game;
 const resultDiv = document.querySelector('.result');
 const resultList = document.getElementById('result-list');
 
-
-
-categoryButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        category = button.value;
-        categoryButtons.forEach(button => {
-            button.style.backgroundColor = 'white';
-        })
-        button.style.backgroundColor = 'lightgreen';
-    })
-})
-
-subtractPlayers.addEventListener('click', () => {
-    if (amountOfPlayers > 1) {
-        amountOfPlayers--;
-        amountPlayersInput.value = amountOfPlayers;
-    }
-})
-addPlayers.addEventListener('click', () => {
-    if (amountOfPlayers < 10) {
-        amountOfPlayers++;
-        amountPlayersInput.value = amountOfPlayers;
-    }
-})
-
-introContinueButton.addEventListener('click', () => {
-    if(!category == '' && !amountOfPlayers == 0) {
-        introDiv.classList.toggle('hidden');
-        namesDiv.classList.toggle('show');
-        getQuestions(category);
-        makeNameInputs();
-    } else {
-        console.log('Choose a category and how many players');
-        alert('Choose a category and how many players');
+class Player {
+    constructor(name) {
+        this.name = name;
+        this.score = 0;
     }
 
-})
-
-startGameButton.addEventListener('click', () => {
-    const inputs = namesInputDiv.children;
-
-    // Check if all inputs are filled
-    if ([...inputs].every(input => input.value.trim() !== "")) {
-      // If all inputs are filled
-      console.log("All inputs are filled!");
-      namesDiv.classList.toggle('show');
-        gameDiv.classList.toggle('show');
-        createPlayers();
-        startGame();
-      // Proceed to the next step
-    } else {
-      // If any input is empty, alert the user
-      alert("Please fill in all inputs with a name.");
+    addScore() {
+        this.score++;
     }
 
-  });
-
-
-
-
-
-
+    resetScore() {
+        this.score = 0
+    }
+}
 
 class Game {
     constructor(questions, players) {
@@ -99,7 +52,7 @@ class Game {
         this.counter = 0;
         this.currentPlayer = 0;
         this.gameOver = false;
-    
+
     }
 
     loadNewQuestion() {
@@ -124,21 +77,18 @@ class Game {
             ]
 
             this.answers = shuffleArray(this.answers);
-
+            player.textContent = this.players[this.currentPlayer].name;
+            questionCounter.textContent = `${this.counter + 1} / ${this.questions.results.length}`;
             question.textContent = this.questions.results[this.counter].question;
             for (let i = 0; i < 4; i++) {
                 optionButtons[i].value = this.answers[i].isCorrect;
                 optionButtons[i].textContent = this.answers[i].answer;
             }
-
-
-            
-
-            
         } else {
+
             this.showResults();
             this.gameOver = true;
-            console.log('GAME OVER')
+
         }
 
 
@@ -149,7 +99,7 @@ class Game {
         if (selected.value === 'true') {
             selected.style.backgroundColor = 'lightgreen';
             this.givePoint();
-            this.changePlayer();
+            // this.changePlayer();
         } else {
             selected.style.backgroundColor = 'red';
             optionButtons.forEach(option => {
@@ -157,10 +107,7 @@ class Game {
                     option.style.backgroundColor = 'lightgreen';
                 }
             })
-            console.log(this.players[this.currentPlayer].name);
-            console.log(this.players[this.currentPlayer].score);
-            console.log(this.counter);
-            this.changePlayer();
+            // this.changePlayer();
 
         }
     }
@@ -181,62 +128,110 @@ class Game {
 
     givePoint() {
         this.players[this.currentPlayer].score++;
-        console.log(this.players[this.currentPlayer].name);
-        console.log(this.players[this.currentPlayer].score);
-        console.log(this.counter);
     }
 
     showResults() {
-        console.log('inside showresults')
-        game.players.sort((a,b) => b.score - a.score);
+        game.players.sort((a, b) => b.score - a.score);
         game.players.forEach(player => {
             const listItem = document.createElement('li');
             const name = document.createElement('p');
             name.textContent = player.name
             const score = document.createElement('p');
-            score.textContent = `${player.score}/${game.questions.results.length}`;
+            score.textContent = `${player.score}/${game.questions.results.length / amountOfPlayers}`;
             listItem.appendChild(name)
             listItem.appendChild(score)
 
             resultList.appendChild(listItem);
         })
+        gameDiv.classList.toggle('show');
+        resultDiv.classList.toggle('show');
     }
 
 
 }
 
+
+subtractPlayers.addEventListener('click', () => {
+    if (amountOfPlayers > 1) {
+        amountOfPlayers--;
+        amountPlayersInput.value = amountOfPlayers;
+    }
+})
+
+addPlayers.addEventListener('click', () => {
+    if (amountOfPlayers < 10) {
+        amountOfPlayers++;
+        amountPlayersInput.value = amountOfPlayers;
+    }
+})
+
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        category = button.value;
+        categoryButtons.forEach(button => {
+            button.style.backgroundColor = 'white';
+        })
+        button.style.backgroundColor = 'lightgreen';
+    })
+})
+
+introContinueButton.addEventListener('click', () => {
+    if (!category == '' && !amountOfPlayers == 0) {
+        introDiv.classList.toggle('hidden');
+        namesDiv.classList.toggle('show');
+        getQuestions(category);
+        makeNameInputs();
+    } else {
+        console.log('Choose a category and how many players');
+        alert('Choose a category and how many players');
+    }
+
+})
+
+
+
+startGameButton.addEventListener('click', () => {
+    const inputs = namesInputDiv.children;
+
+    // Check if all inputs are filled
+    if ([...inputs].every(input => input.value.trim() !== "")) {
+        namesDiv.classList.toggle('show');
+        gameDiv.classList.toggle('show');
+        createPlayers();
+        startGame();
+    } else {
+        // If any input is empty, alert the user
+        alert("Please fill in all inputs with a name.");
+    }
+
+});
+
 optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
         game.checkIfCorrect(selected);
         game.disableOptions();
-        // optionButtons.forEach(button => {
-        //     button.disabled = true;
-        // })
+
     });
 })
 
 nextQuestionBtn.addEventListener('click', () => {
-    if(!game.gameOver) {
-        game.counter++;
-        resetOptionColors();
-        game.loadNewQuestion();
-        optionButtons.forEach(button => {
-            button.disabled = false;
-        })
-    } else {
-        gameDiv.classList.toggle('show');
-        resultDiv.classList.toggle('show');
-    }
+    game.counter++;
+    resetOptionColors();
+    game.changePlayer();
+    game.loadNewQuestion();
+    optionButtons.forEach(button => {
+        button.disabled = false;
+    })
 });
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1)); // Get a random index from 0 to i
-      [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
+        const j = Math.floor(Math.random() * (i + 1)); // Get a random index from 0 to i
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
     }
     return array;
-  }
-  
+}
+
 function resetOptionColors() {
     optionButtons.forEach(option => {
         option.style.backgroundColor = 'white';
@@ -248,44 +243,27 @@ function showResults() {
 
 }
 
-class Player {
-    constructor(name) {
-        this.name = name;
-        this.score = 0;
-    }
-
-    addScore() {
-        this.score++;
-    }
-
-    resetScore() {
-        this.score = 0
-    }
-}
-
-
-
 async function getQuestions(category) {
     let response;
 
     switch (category) {
         case 'sports':
-            response = await fetch('https://opentdb.com/api.php?amount=10&category=21&difficulty=medium&type=multiple');
+            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=21&difficulty=medium&type=multiple`);
             questions = await response.json();
             console.log(questions.results);
             break;
         case 'history':
-            response = await fetch('https://opentdb.com/api.php?amount=10&category=23&difficulty=medium&type=multiple');
+            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=23&difficulty=medium&type=multiple`);
             questions = await response.json();
             console.log(questions.results);
             break;
         case 'movies':
-            response = await fetch('https://opentdb.com/api.php?amount=10&category=11&difficulty=medium&type=multiple');
+            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=11&difficulty=medium&type=multiple`);
             questions = await response.json();
             console.log(questions.results);
             break;
         case 'animals':
-            response = await fetch('https://opentdb.com/api.php?amount=10&category=27&difficulty=medium&type=multiple');
+            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=27&difficulty=medium&type=multiple`);
             questions = await response.json();
             console.log(questions.results);
             break;
