@@ -20,7 +20,7 @@ const startGameButton = document.getElementById('start-game');
 const gameDiv = document.querySelector('.game');
 const question = document.getElementById('question');
 const optionButtons = document.querySelectorAll('.option');
-const nextQuestionBtn = document.getElementById('next-question');
+const nextQuestionBtn = document.querySelector('.next-question');
 const player = document.getElementById('current-player');
 const questionCounter = document.getElementById('question-counter');
 let questions;
@@ -210,11 +210,12 @@ optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
         game.checkIfCorrect(selected);
         game.disableOptions();
-
+        nextQuestionBtn.classList.toggle('show');
     });
 })
 
 nextQuestionBtn.addEventListener('click', () => {
+    nextQuestionBtn.classList.toggle('show')
     game.counter++;
     resetOptionColors();
     game.changePlayer();
