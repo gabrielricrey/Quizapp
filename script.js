@@ -325,7 +325,7 @@ function makeNameInputs() {
 function createPlayers() {
     const players = [];
     for (let i = 0; i < amountOfPlayers; i++) {
-        const player = new Player(document.querySelectorAll('.name-input')[i].value, i + 1);
+        const player = new Player(document.querySelectorAll('.name-input')[i].value);
         players.push(player);
     }
 
