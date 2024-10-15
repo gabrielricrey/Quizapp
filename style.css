@@ -81,14 +81,7 @@ body {
 
 }
 
-
-#players-amount {
-    text-align: center;
-    border: none;
-
-}
-
-.intro .player-amount button {
+.intro .game-info .player-amount .input button {
     font-size: 1.5rem;
     border: none;
     cursor: pointer;
@@ -97,6 +90,11 @@ body {
     color: #000;
 }
 
+#players-amount {
+    text-align: center;
+    border: none;
+
+}
 #subtract {
     background-color: rgb(232, 70, 70);
     border-radius: 10px 0 0 10px;
