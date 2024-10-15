@@ -2,6 +2,8 @@
 // Intro
 const introDiv = document.querySelector('.intro');
 let category = "";
+let difficulty = "";
+const radioButtons = document.querySelectorAll('.radio-btns')
 const categoryButtons = document.querySelectorAll('.category-buttons');
 const introContinueButton = document.getElementById('intro-continue-button');
 const subtractPlayers = document.getElementById('subtract');
@@ -162,6 +164,12 @@ addPlayers.addEventListener('click', () => {
     }
 })
 
+radioButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        difficulty = button.value;
+    })
+})
+
 categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
         category = button.value;
@@ -173,14 +181,14 @@ categoryButtons.forEach(button => {
 })
 
 introContinueButton.addEventListener('click', () => {
-    if (!category == '' && !amountOfPlayers == 0) {
+    if (!category == '' && !amountOfPlayers == 0 && !difficulty == '') {
         introDiv.classList.toggle('hidden');
         namesDiv.classList.toggle('show');
         getQuestions(category);
         makeNameInputs();
     } else {
         console.log('Choose a category and how many players');
-        alert('Choose a category and how many players');
+        alert('Choose difficulty, a category and how many players');
     }
 
 })
@@ -247,32 +255,59 @@ async function getQuestions(category) {
 
     switch (category) {
         case 'sports':
-            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=21&difficulty=medium&type=multiple`);
-            questions = await response.json();
-            console.log(questions.results);
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=21&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error) {
+                console.log(error);
+            }
             break;
         case 'history':
-            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=23&difficulty=medium&type=multiple`);
-            questions = await response.json();
-            console.log(questions.results);
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=23&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error) {
+                console.log(error);
+            }
             break;
         case 'movies':
-            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=11&difficulty=medium&type=multiple`);
-            questions = await response.json();
-            console.log(questions.results);
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=11&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error) {
+                console.log(error);
+            }
             break;
         case 'animals':
-            response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=27&difficulty=medium&type=multiple`);
-            questions = await response.json();
-            console.log(questions.results);
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=27&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error){
+                console.log(error);
+            }
             break;
         case 'mix':
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions);
+            }
 
-            // fixa senare! 
-
-            response = await fetch('');
-            questions = await response.json();
-            console.log(questions);
+            catch (error) {
+                console.log(error);
+            }
             break;
 
 
