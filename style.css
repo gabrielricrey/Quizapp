@@ -75,14 +75,14 @@ body {
     gap: 5px;
     background-color: #fff;
     border-radius: 10px;
+    width: 100%;
 }
 
-.intro .game-info .player-amount .input input {
-  border-radius: 10px;
+.intro .game-info .player-amount .input p {
   width: 30%;
   font-size: 1.5rem;
   outline: none;
-
+  padding: 0 1rem;
 }
 
 .intro .game-info .player-amount .input button {

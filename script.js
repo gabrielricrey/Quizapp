@@ -9,7 +9,7 @@ const introContinueButton = document.getElementById('intro-continue-button');
 const subtractPlayers = document.getElementById('subtract');
 const addPlayers = document.getElementById('add');
 const amountPlayersInput = document.getElementById('players-amount');
-let amountOfPlayers = 0;
+let amountOfPlayers = 1;
 
 
 // Names
@@ -156,14 +156,14 @@ class Game {
 subtractPlayers.addEventListener('click', () => {
     if (amountOfPlayers > 1) {
         amountOfPlayers--;
-        amountPlayersInput.value = amountOfPlayers;
+        amountPlayersInput.textContent = amountOfPlayers;
     }
 })
 
 addPlayers.addEventListener('click', () => {
     if (amountOfPlayers < 5) {
         amountOfPlayers++;
-        amountPlayersInput.value = amountOfPlayers;
+        amountPlayersInput.textContent = amountOfPlayers;
     }
 })
 
