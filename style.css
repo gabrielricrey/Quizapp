@@ -13,13 +13,13 @@
 html {
     touch-action: manipulation;
     background-color: rgb(6, 38, 81);
-  }
-  
+}
+
 
 input, textarea, select, button {
     font-size: 16px;
-  }
-  
+}
+
 body {
     margin: 0 auto;
     width: 100%;
@@ -28,7 +28,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(74, 128, 199);
+    /* background-color: rgb(74, 128, 199); */
+    background-color: rgb(6, 38, 81);
 }
 
 .intro {
@@ -64,7 +65,7 @@ body {
 }
 
 .intro .game-info .player-amount h3 {
-    color: #000;
+    color: #fff;
     font-weight: 400;
     margin-bottom: 1rem;
 }
@@ -109,6 +110,9 @@ body {
     border-radius: 0 10px 10px 0;
 }
 
+label {
+    color: #fff;
+}
 
 .intro .categories {
     width: 100%;
@@ -386,6 +390,10 @@ right: 1rem;
 
 
 @media screen and (min-width: 1000px) {
+
+    body {
+        border: 1px solid black;
+    }
     .intro .game-info .player-amount {
         width: 20%;
     }
