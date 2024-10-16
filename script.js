@@ -32,7 +32,6 @@ let game;
 // Result
 const resultDiv = document.querySelector('.result');
 const resultList = document.getElementById('result-list');
-const restartBtn = document.getElementById('restart');
 const newGameBtn = document.getElementById('new-game');
 
 class Player {
@@ -355,17 +354,6 @@ function resetOptionColors() {
 
 
 // Result
-
-restartBtn.addEventListener('click', () => {
-    gameDiv.classList.toggle('show');
-    resultDiv.classList.toggle('show');
-    game.counter = 0
-    game.players.forEach(player => {
-        player.score = 0
-    })
-    resultList.innerHTML = '';
-    game.loadNewQuestion();
-})
 
 newGameBtn.addEventListener('click', () => {
     resultDiv.classList.toggle('show');
