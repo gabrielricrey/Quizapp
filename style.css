@@ -12,6 +12,7 @@
 
 html {
     touch-action: manipulation;
+    background-color: rgb(6, 38, 81);
   }
   
 
@@ -22,7 +23,7 @@ input, textarea, select, button {
 body {
     margin: 0 auto;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -32,7 +33,7 @@ body {
 
 .intro {
     width: 100%;
-    /* height: 100dvh; */
+    height: 100vh;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -47,6 +48,8 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 1rem;
     padding: 1rem;
     width: 100%;
@@ -57,6 +60,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 50%;
 }
 
 .intro .game-info .player-amount h3 {
@@ -121,7 +125,7 @@ body {
 
 .intro .categories .buttons button {
     width: 100%;
-    background-color: #e4e6f2;
+    background-color: #fff;
     border: 1px solid lightgray;
     border-radius: 10px;
     cursor: pointer;
@@ -152,9 +156,31 @@ body {
     display: none;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 1rem;
     gap: 5px;
     width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.names #back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 1rem;
+    padding: .7rem;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+}
+
+.names h2 {
+    margin-bottom: 1rem;
 }
 
 .names .names-div {
@@ -207,16 +233,24 @@ body {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: .5rem;
 }
 
 #current-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
     text-align: center;
     background-color: rgb(7, 7, 164);
     color: #fff;
     border-radius: 10px;
-    padding: .5rem;
+    padding: .5rem 1rem;
     margin: .5rem;
-    position: absolute;
+    /* position: absolute; */
     top: 1rem;
     left: 1rem;
 }
@@ -240,15 +274,17 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
     gap: 5px;
 }
 
 .game .options .option {
     background-color: #fff;
-    border: 1px solid lightgray;
+    /* border: 1px solid lightgray; */
+    cursor: pointer;
+    border: none;
     width: 100%;
     padding: 1rem;
-    cursor: pointer;
     border-radius: 10px;
     color: #000;
 }
@@ -280,17 +316,26 @@ margin: .5rem;
 color: #000;
 background-color: #fff;
 border-radius: 10px;
-position: absolute;
+/* position: absolute; */
 top: 1rem;
 right: 1rem;
 }
 
 .result {
     width: 100%;
+    height: 100vh;
     display: none;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
     padding: 1rem;
+}
+
+.result h2, .names h2 {
+    font-weight: 400;
+    background-color: #fff;
+    padding: .3rem .5rem;
+    border-radius: 10px;
 }
 
 .result.show {
@@ -298,6 +343,7 @@ right: 1rem;
 }
 
 .result ul {
+    margin-top: 1rem;
     width: 100%;
     list-style: none;
     border-radius: 10px;
@@ -311,4 +357,70 @@ right: 1rem;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
+}
+
+.result .buttons {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.result .buttons button {
+    padding: .5rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#restart {
+    background-color: rgb(252, 252, 98);
+}
+
+#new-game {
+    background-color: rgb(75, 196, 75);
+    color: #fff;
+}
+
+
+@media screen and (min-width: 1000px) {
+    .intro .game-info .player-amount {
+        width: 20%;
+    }
+
+    .intro .game-info .player-amount .input button {
+        padding: .1rem 1rem;
+    }
+
+    .intro .categories {
+        width: 50%;
+    }
+
+    #intro-continue-button {
+        width: 25%;
+        padding: .5rem;
+    }
+
+    .names .names-div {
+        width: 50%;
+        
+    }
+
+    #start-game {
+        width: 20%;
+    }
+
+    .game .options {
+        width: 60%;
+    }
+
+    .next-question {
+        width: 20%;
+    }
+
+    .result ul {
+      width: 50%;
+    }
 }

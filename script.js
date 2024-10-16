@@ -16,6 +16,7 @@ let amountOfPlayers = 0;
 const namesDiv = document.querySelector('.names');
 const namesInputDiv = document.querySelector('.names-div');
 const startGameButton = document.getElementById('start-game');
+const backBtn = document.getElementById('back');
 
 
 // Game
@@ -23,7 +24,7 @@ const gameDiv = document.querySelector('.game');
 const question = document.getElementById('question');
 const optionButtons = document.querySelectorAll('.option');
 const nextQuestionBtn = document.querySelector('.next-question');
-const player = document.getElementById('current-player');
+const player = document.getElementById('current-player-name');
 const questionCounter = document.getElementById('question-counter');
 let questions;
 let game;
@@ -31,6 +32,8 @@ let game;
 // Result
 const resultDiv = document.querySelector('.result');
 const resultList = document.getElementById('result-list');
+const restartBtn = document.getElementById('restart');
+const newGameBtn = document.getElementById('new-game');
 
 class Player {
     constructor(name) {
@@ -131,10 +134,10 @@ class Game {
 
     showResults() {
         game.players.sort((a, b) => b.score - a.score);
-        game.players.forEach(player => {
+        game.players.forEach((player,index) => {
             const listItem = document.createElement('li');
             const name = document.createElement('p');
-            name.textContent = player.name
+            name.textContent = ` ${index + 1}. ${player.name}`
             const score = document.createElement('p');
             score.textContent = `${player.score}/${game.questions.results.length / amountOfPlayers}`;
             listItem.appendChild(name)
@@ -149,6 +152,7 @@ class Game {
 
 }
 
+// Intro page
 
 subtractPlayers.addEventListener('click', () => {
     if (amountOfPlayers > 1) {
@@ -158,7 +162,7 @@ subtractPlayers.addEventListener('click', () => {
 })
 
 addPlayers.addEventListener('click', () => {
-    if (amountOfPlayers < 10) {
+    if (amountOfPlayers < 5) {
         amountOfPlayers++;
         amountPlayersInput.value = amountOfPlayers;
     }
@@ -184,7 +188,7 @@ introContinueButton.addEventListener('click', () => {
     if (!category == '' && !amountOfPlayers == 0 && !difficulty == '') {
         introDiv.classList.toggle('hidden');
         namesDiv.classList.toggle('show');
-        getQuestions(category);
+        // getQuestions(category);
         makeNameInputs();
     } else {
         console.log('Choose a category and how many players');
@@ -193,16 +197,102 @@ introContinueButton.addEventListener('click', () => {
 
 })
 
+async function getQuestions(category) {
+    let response;
+
+    switch (category) {
+        case 'sports':
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${(amountOfPlayers * 10)}&category=21&difficulty=${difficulty}&type=multiple`);
+                try {
+                    questions = await response.json();
+                    console.log(questions.results);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            catch (error) {
+                console.log(error);
+            }
+            break;
+        case 'history':
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${(amountOfPlayers * 10)}&category=23&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error) {
+                console.log(error);
+            }
+            break;
+        case 'movies':
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${(amountOfPlayers * 10)}&category=11&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error) {
+                console.log(error);
+            }
+            break;
+        case 'animals':
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${(amountOfPlayers * 10)}&category=27&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions.results);
+            }
+
+            catch (error){
+                console.log(error);
+            }
+            break;
+        case 'mix':
+            try {
+                response = await fetch(`https://opentdb.com/api.php?amount=${(amountOfPlayers * 10)}&difficulty=${difficulty}&type=multiple`);
+                questions = await response.json();
+                console.log(questions);
+            }
+
+            catch (error) {
+                console.log(error);
+            }
+            break;
 
 
-startGameButton.addEventListener('click', () => {
+    }
+}
+
+
+// Name page
+
+backBtn.addEventListener('click', () => {
+    namesDiv.classList.toggle('show');
+    reset();
+})
+
+function makeNameInputs() {
+    for (let i = 0; i < amountOfPlayers; i++) {
+        const nameInput = document.createElement('input');
+        nameInput.className = "name-input";
+        namesInputDiv.append(nameInput);
+    }
+}
+
+
+
+startGameButton.addEventListener('click', async () => {
     const inputs = namesInputDiv.children;
 
     // Check if all inputs are filled
     if ([...inputs].every(input => input.value.trim() !== "")) {
         namesDiv.classList.toggle('show');
         gameDiv.classList.toggle('show');
-        createPlayers();
+        const players = createPlayers();
+        await getQuestions(category);
+        createGame(players);
         startGame();
     } else {
         // If any input is empty, alert the user
@@ -210,6 +300,27 @@ startGameButton.addEventListener('click', () => {
     }
 
 });
+
+function createPlayers() {
+    const players = [];
+    for (let i = 0; i < amountOfPlayers; i++) {
+        const player = new Player(document.querySelectorAll('.name-input')[i].value);
+        players.push(player);
+    }
+
+    return players
+}
+
+function createGame(players) {
+    game = new Game(questions, players);
+}
+
+function startGame() {
+    game.loadNewQuestion();
+}
+
+
+// Game
 
 optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
@@ -226,9 +337,6 @@ nextQuestionBtn.addEventListener('click', () => {
     game.changePlayer();
     game.loadNewQuestion();
     game.ableAndDisableOptions();
-    // optionButtons.forEach(button => {
-    //     button.disabled = false;
-    // })
 });
 
 function shuffleArray(array) {
@@ -245,102 +353,33 @@ function resetOptionColors() {
     })
 }
 
-function showResults() {
-    console.log('RESULTS')
 
-}
+// Result
 
-async function getQuestions(category) {
-    let response;
-
-    switch (category) {
-        case 'sports':
-            try {
-                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=21&difficulty=${difficulty}&type=multiple`);
-                questions = await response.json();
-                console.log(questions.results);
-            }
-
-            catch (error) {
-                console.log(error);
-            }
-            break;
-        case 'history':
-            try {
-                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=23&difficulty=${difficulty}&type=multiple`);
-                questions = await response.json();
-                console.log(questions.results);
-            }
-
-            catch (error) {
-                console.log(error);
-            }
-            break;
-        case 'movies':
-            try {
-                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=11&difficulty=${difficulty}&type=multiple`);
-                questions = await response.json();
-                console.log(questions.results);
-            }
-
-            catch (error) {
-                console.log(error);
-            }
-            break;
-        case 'animals':
-            try {
-                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&category=27&difficulty=${difficulty}&type=multiple`);
-                questions = await response.json();
-                console.log(questions.results);
-            }
-
-            catch (error){
-                console.log(error);
-            }
-            break;
-        case 'mix':
-            try {
-                response = await fetch(`https://opentdb.com/api.php?amount=${amountOfPlayers * 10}&difficulty=${difficulty}&type=multiple`);
-                questions = await response.json();
-                console.log(questions);
-            }
-
-            catch (error) {
-                console.log(error);
-            }
-            break;
-
-
-    }
-}
-
-function makeNameInputs() {
-    for (let i = 0; i < amountOfPlayers; i++) {
-        const nameInput = document.createElement('input');
-        nameInput.className = "name-input";
-        namesInputDiv.append(nameInput);
-    }
-}
-
-function createPlayers() {
-    const players = [];
-    for (let i = 0; i < amountOfPlayers; i++) {
-        const player = new Player(document.querySelectorAll('.name-input')[i].value);
-        players.push(player);
-    }
-
-    createGame(players);
-
-
-}
-
-function createGame(players) {
-    game = new Game(questions, players);
-}
-
-function startGame() {
+restartBtn.addEventListener('click', () => {
+    gameDiv.classList.toggle('show');
+    resultDiv.classList.toggle('show');
+    game.counter = 0
+    game.players.forEach(player => {
+        player.score = 0
+    })
+    resultList.innerHTML = '';
     game.loadNewQuestion();
+})
+
+newGameBtn.addEventListener('click', () => {
+    resultDiv.classList.toggle('show');
+    reset();
+    
+})
+
+function reset() {
+    introDiv.classList.toggle('hidden');
+    namesInputDiv.innerHTML = '';
 }
+
+
+
 
 
 
