@@ -15,6 +15,7 @@ let amountOfPlayers = 1;
 // Names
 const namesDiv = document.querySelector('.names');
 const namesInputDiv = document.querySelector('.names-div');
+let nameInputs;
 const startGameButton = document.getElementById('start-game');
 const backBtn = document.getElementById('back');
 
@@ -278,7 +279,21 @@ function makeNameInputs() {
         nameInput.className = "name-input";
         namesInputDiv.append(nameInput);
     }
+
+    nameInputs = document.querySelectorAll('.name-input');
+    nameInputs.forEach(nameInput => {
+    
+        nameInput.addEventListener('input', () => {
+            const maxChars = 12;
+            if (nameInput.value.length > maxChars) {
+                nameInput.value = nameInput.value.slice(0, maxChars); // Skär av överflödiga tecken
+                alert('Maxium 12 characters in Name')
+            }
+        })
+    })
 }
+
+
 
 
 

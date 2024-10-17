@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Honk&display=swap');
-
 * {
     padding: 0;
     margin: 0;
@@ -28,7 +26,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: rgb(74, 128, 199); */
     background-color: rgb(6, 38, 81);
 }
 
@@ -42,7 +39,7 @@ body {
 }
 
 .intro h1 {
-    font-family: "Honk", system-ui;
+    color: #fff;
 }
 
 .intro .game-info {
@@ -141,10 +138,11 @@ label {
     background-color: rgb(75, 196, 75);
     padding: 1rem;
     cursor: pointer;
-    border: 1px solid rgb(65, 172, 65);
+    border: none;
     border-radius: 10px;
     color: #fff;
     width: 60%;
+    margin-top: 1rem;
 }
 
 #intro-continue-button:hover, #start-game:hover {
@@ -162,10 +160,18 @@ label {
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    gap: 5px;
+    gap: 1rem;
     width: 100%;
     height: 100dvh;
     position: relative;
+}
+
+.names h1, .result h1 {
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    top: .5rem;
+    transform: translate(-50%);
 }
 
 .names #back {
@@ -240,21 +246,26 @@ label {
     align-items: center;
     position: absolute;
     top: .5rem;
+    padding: 1rem;
+}
+
+.game .top-bar h1 {
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
 }
 
 #current-player {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 10px;
     text-align: center;
     background-color: rgb(7, 7, 164);
     color: #fff;
     border-radius: 10px;
     padding: .5rem 1rem;
-    margin: .5rem;
-    /* position: absolute; */
     top: 1rem;
     left: 1rem;
 }
@@ -270,7 +281,8 @@ label {
     background-color: #fff;
     color: #000;
     padding: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
+    width: 100%;
 }
 
 .game .options {
@@ -316,7 +328,6 @@ label {
 
 #question-counter {
 padding: .5rem;
-margin: .5rem;
 color: #000;
 background-color: #fff;
 border-radius: 10px;
@@ -333,6 +344,7 @@ right: 1rem;
     align-items: center;
     justify-content: space-around;
     padding: 1rem;
+    position: relative;
 }
 
 .result h2, .names h2 {
@@ -392,7 +404,7 @@ right: 1rem;
 @media screen and (min-width: 1000px) {
 
     body {
-        border: 1px solid black;
+        /* border: 1px solid black; */
     }
     .intro .game-info .player-amount {
         width: 20%;
@@ -403,7 +415,18 @@ right: 1rem;
     }
 
     .intro .categories {
-        width: 50%;
+        width: 100%;
+        flex-direction: row;
+    }
+
+    .intro .categories .buttons{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .intro .categories .buttons .category-buttons {
+        width: 49.7%;
+        height: 5rem;
     }
 
     #intro-continue-button {
@@ -420,8 +443,26 @@ right: 1rem;
         width: 20%;
     }
 
+    .game h3 {
+
+    }
+
+    .game .top-bar {
+       justify-content: end;
+    }
+
+    #current-player {
+     margin-right: .5rem;
+    }
     .game .options {
-        width: 60%;
+        /* width: 60%; */
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .game .options .option {
+        width: 49.7%;
+        height: 7rem;
     }
 
     .next-question {
