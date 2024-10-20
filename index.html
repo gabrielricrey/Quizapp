@@ -15,14 +15,7 @@
     <div class="intro">
         <h1>Quizy!</h1>
         <div class="game-info">
-            <div class="player-amount">
-                <h3>Players</h3>
-                <div class="input">
-                    <button id="subtract">-</button>
-                    <p id="players-amount"> 1 </p>
-                    <button id="add">+</i></button>
-                </div>
-            </div>
+            <input type="text" id="player-name" placeholder="Enter your name">
             <div class="difficulty">
                 <input type="radio" name="difficulty" id="easy" value="easy" class="radio-btns">
                 <label for="easy">Easy</label>
@@ -38,32 +31,14 @@
                     <button class="category-buttons" name="category" value="movies">Movies</button>
                     <button class="category-buttons" name="category" value="animals">Animals</button>
                 </div>
-                <button id="intro-continue-button">Continue</button>
+                <button id="start-game-button">Start Game</button>
             </div>
         </div>
     </div>
-
-
-    <div class="names">
-        <h1>Quizy!</h1>
-        <button id="back"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Enter Player names</h2>
-        <div class="names-div">
-
-        </div>
-        <button id="start-game">Start Game</button>
-    </div>
-
 
     <div class="game">
-        <div class="top-bar">
-            <h1>Quizy!</h1>
-            <div id="current-player">
-                <i class="fa-solid fa-user"></i>
-                <p id="current-player-name"></p>
-            </div>
-            <p id="question-counter"></p>
-        </div>
+        <h1>Quizy!</h1>
+        <p id="question-counter"></p>
         <h3 id="question"></h3>
         <div class="options">
             <button class="option"></button>
