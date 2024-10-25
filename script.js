@@ -21,6 +21,8 @@ let game;
 const resultDiv = document.querySelector('.result');
 const resultList = document.getElementById('result-list');
 const newGameBtn = document.getElementById('new-game');
+let highScore = [];
+localStorage.setItem('highScore', JSON.stringify(highScore));
 
 class Player {
     constructor(name) {
@@ -108,16 +110,34 @@ class Game {
     }
 
     showResults() {
+            const result = {
+                name: game.player.name,
+                category: category,
+                difficulty: difficulty,
+                score: game.player.score
+            }
 
-            const listItem = document.createElement('li');
-            const name = document.createElement('p');
-            name.textContent = game.player.name;
-            const score = document.createElement('p');
-            score.textContent = `${game.player.score}/${game.questions.results.length}`;
-            listItem.appendChild(name)
-            listItem.appendChild(score)
+            // localStorage.setItem('highScore', JSON.stringify(highScore));
+            let storedHighscore = JSON.parse(localStorage.getItem('highScore'));
+            storedHighscore.push(result);
+            storedHighscore
+            .sort((a,b) => a.score - b.score).forEach(result => {
+                
+                const listItem = document.createElement('li');
+                const name = document.createElement('p');
+                name.textContent = result.name;
+                const category = document.createElement('p');
+                category.textContent = result.category;
+                const difficulty = document.createElement('p');
+                difficulty.textContent = result.difficulty;
+                const score = document.createElement('p');
+                score.textContent = `${result.score}/10`;
+                listItem.append(name, difficulty, category, score);
+                
+                resultList.appendChild(listItem);
+                localStorage.setItem('highScore', JSON.stringify(highScore));
 
-            resultList.appendChild(listItem);
+        })
 
         gameDiv.classList.toggle('show');
         resultDiv.classList.toggle('show');
@@ -278,6 +298,10 @@ newGameBtn.addEventListener('click', () => {
 
 function reset() {
     introDiv.classList.toggle('hidden');
+    playerName.value = '';
+    radioButtons.forEach(radioBtn => {
+        radioBtn.checked = false;
+    })
     categoryButtons.forEach(button => {
         button.style.backgroundColor = 'white';
     })

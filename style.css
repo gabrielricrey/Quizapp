@@ -197,9 +197,8 @@ label {
     cursor: pointer;
     bottom: 0;
     left: 50%;
-    margin-bottom: 3rem;
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
     transform: translate(-50%);
 }
 
@@ -301,10 +300,6 @@ label {
         width: 20%;
     }
 
-    .game h3 {
-
-    }
-
     .game .options {
         /* width: 60%; */
         flex-direction: row;
@@ -318,6 +313,7 @@ label {
 
     .next-question {
         width: 20%;
+        bottom: 3rem;
     }
 
     .result ul {
