@@ -25,18 +25,20 @@
                 <label for="hard">Hard</label>
             </div>
             <div class="categories">
-                <div class="buttons">
-                    <button class="category-buttons" name="category" value="sports">Sports</button>
-                    <button class="category-buttons" name="category" value="history">History</button>
-                    <button class="category-buttons" name="category" value="movies">Movies</button>
-                    <button class="category-buttons" name="category" value="animals">Animals</button>
-                </div>
+                <select name="category" id="category"> 
+                    <option value="">-choose category-</option>
+                    <option value="sports">Sports</option>
+                    <option value="history">History</option>
+                    <option value="movies">Movies</option>
+                    <option value="animals">Animals</option>
+                </select>
                 <button id="start-game-button">Start Game</button>
             </div>
         </div>
     </div>
 
     <div class="game">
+        <button id="exit-game"><i class="fa-solid fa-xmark"></i></button>
         <h1>Quizy!</h1>
         <p id="question-counter"></p>
         <h3 id="question"></h3>

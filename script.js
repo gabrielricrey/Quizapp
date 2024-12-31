@@ -5,8 +5,9 @@ let category = "";
 let difficulty = "";
 const playerName = document.getElementById('player-name');
 const radioButtons = document.querySelectorAll('.radio-btns');
-const categoryButtons = document.querySelectorAll('.category-buttons');
 const startGameBtn = document.getElementById('start-game-button');
+
+let testCategory = document.getElementById('category');
 
 // Game
 const gameDiv = document.querySelector('.game');
@@ -15,6 +16,7 @@ const optionButtons = document.querySelectorAll('.option');
 const nextQuestionBtn = document.querySelector('.next-question');
 const currentPlayerDiv = document.getElementById('current-player');
 const questionCounter = document.getElementById('question-counter');
+const exitBtn = document.getElementById('exit-game');
 let game;
 
 // Result
@@ -51,26 +53,28 @@ class Game {
 
             this.answers = [
                 {
-                    answer: this.questions.results[this.counter].correct_answer,
+                    answer: formatQuestion(this.questions.results[this.counter].correct_answer),
                     isCorrect: true
                 },
                 {
-                    answer: this.questions.results[this.counter].incorrect_answers[0],
+                    answer: formatQuestion(this.questions.results[this.counter].incorrect_answers[0]),
                     isCorrect: false
                 },
                 {
-                    answer: this.questions.results[this.counter].incorrect_answers[1],
+                    answer: formatQuestion(this.questions.results[this.counter].incorrect_answers[1]),
                     isCorrect: false
                 },
                 {
-                    answer: this.questions.results[this.counter].incorrect_answers[2],
+                    answer: formatQuestion(this.questions.results[this.counter].incorrect_answers[2]),
                     isCorrect: false
                 },
             ]
 
             this.answers = shuffleArray(this.answers);
             questionCounter.textContent = `${this.counter + 1} / ${this.questions.results.length}`;
-            question.textContent = this.questions.results[this.counter].question;
+
+            
+            question.textContent = formatQuestion(this.questions.results[this.counter].question);
             for (let i = 0; i < 4; i++) {
                 optionButtons[i].value = this.answers[i].isCorrect;
                 optionButtons[i].textContent = this.answers[i].answer;
@@ -116,12 +120,12 @@ class Game {
                 difficulty: difficulty,
                 score: game.player.score
             }
-
-            // localStorage.setItem('highScore', JSON.stringify(highScore));
+            
             let storedHighscore = JSON.parse(localStorage.getItem('highScore'));
+            resultList.innerHTML = '';
             storedHighscore.push(result);
             storedHighscore
-            .sort((a,b) => a.score - b.score).forEach(result => {
+            .sort((a,b) => b.score - a.score).forEach(result => {
                 
                 const listItem = document.createElement('li');
                 const name = document.createElement('p');
@@ -135,7 +139,7 @@ class Game {
                 listItem.append(name, difficulty, category, score);
                 
                 resultList.appendChild(listItem);
-                localStorage.setItem('highScore', JSON.stringify(highScore));
+                localStorage.setItem('highScore', JSON.stringify(storedHighscore));
 
         })
 
@@ -156,17 +160,8 @@ radioButtons.forEach(button => {
     })
 })
 
-categoryButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        category = button.value;
-        categoryButtons.forEach(button => {
-            button.style.backgroundColor = 'white';
-        })
-        button.style.backgroundColor = 'lightgreen';
-    })
-})
-
 startGameBtn.addEventListener('click', () => {
+    category = testCategory.value;
     if (!category == '' && !playerName.value == '' && !difficulty == '') {
         introDiv.classList.toggle('hidden');
         gameDiv.classList.toggle('show');
@@ -184,6 +179,7 @@ async function initilizeGame() {
     const questions =  await getQuestions(category);
     console.log(questions);
     const player = createPlayer();
+    console.log(player);
     createGame(questions,player)
 }
 
@@ -246,6 +242,7 @@ function createPlayer() {
 }
 
 function createGame(questions,player) {
+    console.log(questions);
     game = new Game(questions, player);
     startGame();
 }
@@ -256,6 +253,12 @@ function startGame() {
 
 
 // Game
+
+function formatQuestion(question) {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = question;
+    return textarea.value;
+}
 
 optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
@@ -287,6 +290,16 @@ function resetOptionColors() {
     })
 }
 
+exitBtn.addEventListener('click', () => {
+    if(optionButtons[0].disabled) {
+        game.ableAndDisableOptions();
+    }
+    testCategory.value = "";
+    resetOptionColors();
+    gameDiv.classList.toggle('show');
+    reset();
+   
+})
 
 // Result
 
@@ -302,9 +315,7 @@ function reset() {
     radioButtons.forEach(radioBtn => {
         radioBtn.checked = false;
     })
-    categoryButtons.forEach(button => {
-        button.style.backgroundColor = 'white';
-    })
+    
 }
 
 

@@ -67,18 +67,19 @@ label {
 
 .intro .categories {
     width: 100%;
-}
-
-.intro .categories .buttons {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    margin-bottom: .5rem;
+    align-items: center;
 }
 
-.intro .categories .buttons button {
+.intro .categories select {
+  width: 200px;
+  border-radius: 5px;
+  padding: .2rem;
+  text-align: center;
+}
+
+.intro .categories button {
     width: 100%;
     background-color: #fff;
     border: 1px solid lightgray;
@@ -278,7 +279,7 @@ label {
 
     .intro .categories {
         width: 100%;
-        flex-direction: row;
+        flex-direction: column;
     }
 
     .intro .categories .buttons{
