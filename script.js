@@ -21,10 +21,9 @@ let game;
 
 // Result
 const resultDiv = document.querySelector('.result');
-const resultList = document.getElementById('result-list');
+const resultList = document.getElementById('result-card');
 const newGameBtn = document.getElementById('new-game');
-let highScore = [];
-localStorage.setItem('highScore', JSON.stringify(highScore));
+
 
 class Player {
     constructor(name) {
@@ -106,6 +105,7 @@ class Game {
     ableAndDisableOptions() {
         optionButtons.forEach(button => {
             button.disabled = !button.disabled;
+            button.style.backgroundColor = 'white';
         })
     }
 
@@ -114,34 +114,18 @@ class Game {
     }
 
     showResults() {
+        resultList.innerHTML = '';
             const result = {
-                name: game.player.name,
-                category: category,
-                difficulty: difficulty,
                 score: game.player.score
             }
             
-            let storedHighscore = JSON.parse(localStorage.getItem('highScore'));
-            resultList.innerHTML = '';
-            storedHighscore.push(result);
-            storedHighscore
-            .sort((a,b) => b.score - a.score).forEach(result => {
-                
-                const listItem = document.createElement('li');
-                const name = document.createElement('p');
-                name.textContent = result.name;
-                const category = document.createElement('p');
-                category.textContent = result.category;
-                const difficulty = document.createElement('p');
-                difficulty.textContent = result.difficulty;
                 const score = document.createElement('p');
                 score.textContent = `${result.score}/10`;
-                listItem.append(name, difficulty, category, score);
                 
-                resultList.appendChild(listItem);
-                localStorage.setItem('highScore', JSON.stringify(storedHighscore));
+                resultList.append(score);
 
-        })
+
+    
 
         gameDiv.classList.toggle('show');
         resultDiv.classList.toggle('show');
@@ -262,8 +246,8 @@ function formatQuestion(question) {
 
 optionButtons.forEach(selected => {
     selected.addEventListener('click', () => {
-        game.checkIfCorrect(selected);
         game.ableAndDisableOptions();
+        game.checkIfCorrect(selected);
         nextQuestionBtn.classList.toggle('show');
     });
 })
